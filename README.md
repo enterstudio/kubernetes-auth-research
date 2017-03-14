@@ -22,9 +22,9 @@ Using a web UI, provision certificates for authenticated users, signing them wit
   1. The web UI creates a strong private key
   1. The web UI creates a CSR using _{id}_ as the common name, and the user's username and/or group memberships in the organization fields. e.g:
 
-    ```
-    openssl req -subj "/CN={id}/O=user:johndoe/O=group1/O=group2"
-    ```
+      ```
+      openssl req -subj "/CN={id}/O=user:johndoe/O=group1/O=group2"
+      ```
 
   1. The web UI creates and signs a certificate and sends the certificate and private key to the user
   1. The web UI stores _{id}_ in a list as an indicator that it is a valid certificate
