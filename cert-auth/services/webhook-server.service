@@ -1,0 +1,14 @@
+[Unit]
+Description=webhook-server
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run \
+--net k8s \
+--rm \
+--name webhook-server \
+webhook-server
+ExecStop=/usr/bin/docker rm webhook-server
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+clusters:
+  - name: webhook-auth
+    cluster:
+      server: http://webhook-server:3000/authorize
+contexts:
+  - context:
+      cluster: webhook-auth
+    name: webhook-auth
+current-context: webhook-auth

@@ -1,0 +1,24 @@
+[Unit]
+Description=kube-apiserver
+Requires=etcd.service
+After=etcd.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run \
+--net k8s \
+--rm \
+--name kube-apiserver \
+-v /etc/tls:/etc/tls \
+-v /etc/kubernetes:/etc/kubernetes \
+gcr.io/google_containers/hyperkube-amd64:v1.5.4 \
+/hyperkube apiserver \
+--etcd-servers="http://etcd:2379" \
+--service-cluster-ip-range="10.32.0.0/16" \
+--client-ca-file="/etc/tls/ca.pem" \
+--authorization-mode="Webhook" \
+--authorization-webhook-config-file="/etc/kubernetes/webhook.conf.yml" \
+ExecStop=/usr/bin/docker rm kube-apiserver
+
+[Install]
+WantedBy=multi-user.target
