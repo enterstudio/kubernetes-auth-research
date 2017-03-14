@@ -85,7 +85,7 @@ WantedBy=multi-user.target
 
 ```
 
-1. Follow the instructions in  [webhook-server/README.md](../webhook-server/README.md) to build a sample webhook server image.
+1. Follow the instructions in  [webhook-server/README.md](webhook-server/README.md) to build a sample webhook server image.
 
 1. Create the file `/etc/systemd/system/webhook-server.service` with the following contents:
 
