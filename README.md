@@ -39,10 +39,44 @@ Using a web UI, provision certificates for authenticated users, signing them wit
   1. verifies that the user (identified by the group `user:{username}`) has access to the requested resource
   1. Responds with an appropriate `SubjectAccessReview` response (allowed: true/false)
 
+### Updating access
+
+When using certificates for auth, all authorization info is derived from the certificate in use. Since certificates can’t be updated after issuance, a user may end up using out-of-date authorization information if their roles change after the certificate is issued. The only way to ensure that a user can no longer use out-of-date certificates would be to revoke them. However, most directory systems don’t post webhooks or otherwise notify external services when role information changes. Detecting such changes would require polling the directory system and looking for changes.
+
 ### Revoking access
 
 **Note:** Kubernetes does not support certificate revocation lists, so any certificate issued by the CA will be valid for as long as the CA’s private key remains the same (probably forever). Thus, we cannot prevent _authentication_ from revoked certificates, but we can prevent _authorization_.
 
 1. To revoke a certificate, a user or admin would "delete" it using the web UI.
 1. The Web UI would mark the certificate with ID _{id}_ as having been revoked
-1. On future authorization requests, the authorization will see that the certificate with ID _{id}_ has been revoked and disallow access.
+1. On future authorization requests, the authorization will see that the certificate with ID _{id}_ has been revoked and will disallow access.
+
+## Webhook Token authentication
+
+Kubernetes supports the use of an outside service to verify bearer tokens and provide identity and authentication information. The use of the token webhook service is configured by passing the `--authentication-token-webhook-config-file` option to kube-apiserver. Using a webhook service for authentication has the benefit of being able to make authentication decisions in real time, as opposed granting authentication once when a certificate is provisioned.
+
+### Provisioning access
+
+1. A user logs in to the web UI using the customer's chosen auth method (typically SSO of some sort).
+1. Within the web UI, the user creates an API key
+1. The web UI creates and stores an API key consisting of random characters, probably hex
+1. The user sees the newly-created API key added to the list of API keys they've provisioned and can copy the API key for future use
+
+### Using access
+
+1. A user configures the `kubectl` client to use their API key as a bearer token, either through static config or in the `--token` flag
+1. kube-apiserver sends a webhook to the authentication service, including the token received from the user.
+  1. The authentication service finds the user who owns the token and returns identifying information about them (username, groups, etc.) to kube-apiserver.
+1. kube-apiserver sends a webhook to the authorization service, including identifying information received from the authentication service.
+1. The authorization service:
+  1. verifies that the user has access to the requested resource
+  1. Responds with an appropriate `SubjectAccessReview` response (allowed: true/false)
+
+### Updating access
+
+Because the authentication service validates the API key on every request and the authorization service retrieves permissions information on every request, changes to user access will be propagated to kubectl requests very quickly (the responses from the authentication and authorization services are cached for a short amount of time).
+
+### Revoking access
+
+1. To revoke a certificate, a user or admin would "delete" it using the web UI.
+1. On future requests, the authentication service will see that the provided token has been revoked and will disallow access.
