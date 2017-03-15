@@ -2,14 +2,38 @@
 
 ## TODO
 
-* Include documentation for creating the CA
-* Include documentation for using [create-user-cert.sh](create-user-cert.sh)
-* Add simple, testable allow/deny logic to the webhook server
 * (maybe) write a tiny web app to demonstrate the end-to-end process
 
 ## Running the test environment
 
 Tested on Ubuntu 16.04. Do everything as root unless you want to be `sudo`-ing all day.
+
+1. Create a new certificate authority
+
+  ```
+  openssl genrsa -out ca-key.pem 4096
+  openssl req -x509 -new -nodes -key ca-key.pem -days 10000 -out ca.pem -subj "/CN=client-ca"
+  ```
+
+1. Copy the CA certificate to `/etc/tls`
+
+  ```
+  mkdir -p /etc/tls/ && cp ca.pem $_
+  ```
+
+1. Copy [create-user-cert.sh](create-user-cert.sh) to the folder in which you created your certificate authority. `chmod +x` as necessary.
+
+1. Invoke `create-user-cert.sh` to create a new certificate
+
+  ```
+  ./create-user-cert.sh -u <username> [-g <group1,group2>]
+  ```
+
+  The script will create a new key and certificate and place them in `certs/`. You’ll use these later when authenticating as a client with Kubernetes. If you would like to create a certificate that will always be denied access to the Kubernetes API (for testing), include `alwaysdeny` in the list of comma-separated groups passed to `create-user-cert.sh`:
+
+  ```
+  ./create-user-cert.sh -u johndoe -g alwaysdeny
+  ```
 
 1. Install Docker
 

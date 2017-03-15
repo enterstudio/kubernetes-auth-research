@@ -1,33 +1,38 @@
-const http = require('http');
+var express = require('express');
+var bodyparser = require('body-parser');
+var app = express();
 
-var getAccessResponse = (allowed) => {
-  // Default is no access.
-  if (allowed !== true && allowed !== false) {
-    allowed = false;
-  }
-
-  var response = {
-    apiVersion: 'authorization.k8s.io/v1beta1',
-    kind: 'SubjectAccessReview',
-    status: {
-      allowed: allowed
+app.post('/authorize', bodyparser.json(), (req, res) => {
+  var getAccessResponse = (allowed) => {
+    // Default to no access if a non-bool was provided.
+    if (allowed !== true && allowed !== false) {
+      allowed = false;
     }
+
+    var response = {
+      apiVersion: 'authorization.k8s.io/v1beta1',
+      kind: 'SubjectAccessReview',
+      status: {
+        allowed: allowed
+      }
+    };
+
+    return response;
   };
 
-  return response;
-};
+  // In our contrived authz scenario, all users are allowed unless they have the
+  // "alwaysdeny" group
+  try {
+    let groups = req.body.spec.group;
 
-const server = http.createServer((req, res) => {
-  var chunks = [];
-
-  req.on('data', (data) => {
-    chunks.push(data);
-  });
-
-  req.on('end', () => {
-    console.log(Buffer.concat(chunks).toString());
-    res.end(JSON.stringify(getAccessResponse(true)) + '\n');
-  });
+    if (groups.indexOf('alwaysdeny') !== -1) {
+      res.send(JSON.stringify(getAccessResponse(false)) + '\n');
+    } else {
+      res.send(JSON.stringify(getAccessResponse(true)) + '\n');
+    }
+  } catch (e) {
+    res.send(JSON.stringify(getAccessResponse(true)) + '\n');
+  }
 });
 
-server.listen(process.env.NODE_PORT || 3000);
+app.listen(process.env.NODE_PORT || 3000);

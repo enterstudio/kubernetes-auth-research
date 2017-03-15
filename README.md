@@ -9,7 +9,6 @@ Auth methods available (per the Kubernetes docs):
 * Auth proxy: An OpenID connect service. This has the most open-ended potential, as we could create an OpenID connect endpoint with arbitrary back-end behaviors but a k8s-compatible interface
 * Basic auth: Compatible with web browsers, but not necessarily with external auth sources. Require API Server restart whenever credentials are added or removed, which is probably a deal-breaker
 
-
 ## Client certificates
 
 Using a web UI, provision certificates for authenticated users, signing them with a single, trusted CA. The CA is created when the cluster is provisioned and passed to the Kubernetes API server using the `--client-ca-file` flag

@@ -8,7 +8,7 @@ ExecStart=/usr/bin/docker run \
 --rm \
 --name webhook-server \
 webhook-server
-ExecStop=/usr/bin/docker rm webhook-server
+ExecStop=-/usr/bin/docker rm -f webhook-server
 
 [Install]
 WantedBy=multi-user.target

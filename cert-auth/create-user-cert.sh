@@ -52,12 +52,11 @@ if [ "${groups}" != "" ];then
 subj=${subj}"/O="${groups//,//O=}
 fi
 
-echo "${subj}"; exit 0;
-
 key=$(openssl genrsa 2048 2>/dev/null)
 req=$(echo "${key}" | openssl req -new -key /dev/stdin -subj "${subj}")
-cert=$(echo "${req}" | openssl x509 -req -CA ca.pem -CAkey ca-key.pem -days 3652 2>/dev/null)
+cert=$(echo "${req}" | openssl x509 -req -CA ca.pem -CAkey ca-key.pem -CAcreateserial -days 3652 2>/dev/null)
 
+mkdir -p ${dir}/certs
 echo "${key}" > certs/${certid}.key
 echo "${cert}" > certs/${certid}.pem
 echo "created certificate ${certid}"
