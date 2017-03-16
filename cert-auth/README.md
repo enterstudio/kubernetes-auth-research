@@ -101,15 +101,15 @@ gcr.io/google_containers/hyperkube-amd64:v1.5.4 \
 --service-cluster-ip-range="10.32.0.0/16" \
 --client-ca-file="/etc/tls/ca.pem" \
 --authorization-mode="Webhook" \
---authorization-webhook-config-file="/etc/kubernetes/webhook.conf.yml" \
-ExecStop=/usr/bin/docker rm kube-apiserver
+--authorization-webhook-config-file="/etc/kubernetes/authz-webhook.conf.yml" \
+ExecStop=-/usr/bin/docker rm -f kube-apiserver
 
 [Install]
 WantedBy=multi-user.target
 
 ```
 
-1. Follow the instructions in  [webhook-server/README.md](webhook-server/README.md) to build a sample webhook server image.
+1. Follow the instructions in  [webhook-server/README.md](../webhook-server/README.md) to build a sample webhook server image.
 
 1. Create the file `/etc/systemd/system/webhook-server.service` with the following contents:
 
@@ -124,7 +124,7 @@ ExecStart=/usr/bin/docker run \
 --rm \
 --name webhook-server \
 webhook-server
-ExecStop=/usr/bin/docker rm webhook-server
+ExecStop=-/usr/bin/docker rm -f webhook-server
 
 [Install]
 WantedBy=multi-user.target

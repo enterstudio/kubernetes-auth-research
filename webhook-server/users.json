@@ -1,0 +1,30 @@
+[
+  {
+    "user": {
+      "username": "ktbartholomew",
+      "uid": "500",
+      "groups": [
+        "group1",
+        "group2",
+        "group3"
+      ]
+    },
+    "tokens": [
+      "264d017bd9d8a64436f381137ab526b36a81bb8c1c159febe7d3319cc51ee078",
+      "c7051160f93ab52d71038155935dfae2623e348db2abeae2754423228610a5cb"
+    ]
+  },
+  {
+    "user": {
+      "username": "alwaysdenied",
+      "uid": "0",
+      "groups": [
+        "group1",
+        "alwaysdeny"
+      ]
+    },
+    "tokens": [
+      "80676badfb00210cfa5999b7570c27a7a4e24efab49cd541b0a35556dd175209"
+    ]
+  }
+]

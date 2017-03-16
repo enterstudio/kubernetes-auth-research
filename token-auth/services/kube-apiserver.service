@@ -16,9 +16,9 @@ gcr.io/google_containers/hyperkube-amd64:v1.5.4 \
 /hyperkube apiserver \
 --etcd-servers="http://etcd:2379" \
 --service-cluster-ip-range="10.32.0.0/16" \
---client-ca-file="/etc/tls/ca.pem" \
+--authentication-token-webhook-config-file="/etc/kubernetes/authn-webhook.conf.yml" \
 --authorization-mode="Webhook" \
---authorization-webhook-config-file="/etc/kubernetes/authz-webhook.conf.yml" \
+--authorization-webhook-config-file="/etc/kubernetes/authz-webhook.conf.yml"
 ExecStop=-/usr/bin/docker rm -f kube-apiserver
 
 [Install]
