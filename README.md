@@ -5,7 +5,7 @@ Auth methods available (per the Kubernetes docs):
 > Kubernetes uses client certificates, bearer tokens, an authenticating proxy, or HTTP basic auth to authenticate API requests through authentication plugins
 
 * Client certificates: Easy provisioning within the API server, as any certificate issued by the CA is considered valid. How to revoke? Can't be used directly in a browser context, but CA generation could be something that is done in the Web UI or via the CLI.
-* Bearer tokens: Static, easy to revoke, easy to use in plaintext (`--token <token>`). Otherwise arbitrary, and not easy to save to a file as with certs. Arguably less secure than certs? Also not usable directly by a browser, as sending the `Authorization: Bearer <token>` header isn't doable out of the box. Requires API Server restart whenever a token is added or removed, which is probably a deal-breaker
+* Bearer tokens: Static, easy to revoke, easy to use in plaintext (`--token <token>` or `--token $(cat token.txt)`). Arguably less secure than certs due to less entropy, but also much easier to use. Not usable directly by a browser, as sending the `Authorization: Bearer <token>` header isn't doable out of the box. Requires a [separate authentication service](#webhook-token-authentication) to verify tokens in a way that doesn’t require restarting the API server all the time.
 * Auth proxy: An OpenID connect service. This has the most open-ended potential, as we could create an OpenID connect endpoint with arbitrary back-end behaviors but a k8s-compatible interface
 * Basic auth: Compatible with web browsers, but not necessarily with external auth sources. Require API Server restart whenever credentials are added or removed, which is probably a deal-breaker
 
