@@ -1,0 +1,17 @@
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStartPre=/bin/mkdir -p {/etc/kubernetes/manifests,/var/lib/etcd,/var/lib/kubelet}
+ExecStart=/usr/bin/kubelet \
+  --kubeconfig=/etc/kubernetes/kubeconfig \
+  --require-kubeconfig \
+  --allow-privileged=true \
+  --pod-manifest-path=/etc/kubernetes/manifests \
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

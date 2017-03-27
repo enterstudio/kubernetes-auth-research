@@ -1,7 +1,7 @@
 clusters:
   - name: webhook-auth
     cluster:
-      server: http://webhook-server:3000/authorize
+      server: http://192.168.33.10:5080/authorize
 contexts:
   - context:
       cluster: webhook-auth

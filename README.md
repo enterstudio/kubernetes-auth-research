@@ -80,3 +80,9 @@ Because the authentication service validates the API key on every request and th
 
 1. To revoke a certificate, a user or admin would "delete" it using the web UI.
 1. On future requests, the authentication service will see that the provided token has been revoked and will disallow access.
+
+### Caveats
+
+When setting the `--authentication-token-webhook-config-file` flag, any downtime for the webhook service will mean that no API requests can be authenticated. This includes API requests made by Kubernetes components. It would be more prudent to use client certificates to authenticate Kubernetes components, as they are checked against the static CA certificate and not a separate service. The use of client certificates also simplifies the cluster bootstrap process, especially in situations where the webhook service itself might be managed by Kubernetes.
+
+When setting `--authorization-mode=Webhook`, downtime for the webhook service will mean that no API requests can be authorized (regardless of the means of authentication). This includes API requests made by Kubernetes components, meaning the health of a cluster could rapidly degrade during an authorization service downtime. This can be countered by setting multiple authorization modes, which will be called in the order specified, effectively using a boolean OR operater between each. For example, with the flag `--authorization-mode=Webhook,RBAC` an authorization failure from the Webhook service (whether due to downtime or purposeful denial) will then be passed through the RBAC evaluation process before finally approving/denying the request. Users belonging to the group `system:masters` are automatically approved and bypass all authorization sources, so it may be prudent for system components to possess this role in order to be able to continue functioning in the event the Webhook service experiences downtime.
