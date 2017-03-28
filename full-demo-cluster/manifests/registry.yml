@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-registry
+  namespace: kube-system
+  labels:
+    k8s-app: kube-registry
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "KubeRegistry"
+spec:
+  selector:
+    k8s-app: kube-registry
+  ports:
+  - name: registry
+    port: 5000
+    protocol: TCP
+  type: NodePort
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: kube-registry-pv
+  namespace: kube-system
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 8Gi
+  hostPath:
+    path: /var/lib/kubelet/pv/kube-registry-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kube-registry-pvc
+  namespace: kube-system
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kube-registry-v0
+  namespace: kube-system
+  labels:
+    k8s-app: kube-registry
+    version: v0
+    kubernetes.io/cluster-service: "true"
+spec:
+  replicas: 1
+  selector:
+    k8s-app: kube-registry
+    version: v0
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-registry
+        version: v0
+        kubernetes.io/cluster-service: "true"
+    spec:
+      containers:
+      - name: registry
+        image: registry:2
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: :5000
+        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+          value: /var/lib/registry
+        volumeMounts:
+        - name: image-store
+          mountPath: /var/lib/registry
+        ports:
+        - containerPort: 5000
+          name: registry
+          protocol: TCP
+      volumes:
+      - name: image-store
+        persistentVolumeClaim:
+          claimName: kube-registry-pvc

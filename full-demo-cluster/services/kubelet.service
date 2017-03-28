@@ -8,6 +8,8 @@ ExecStart=/usr/bin/kubelet \
   --kubeconfig=/etc/kubernetes/kubeconfig \
   --require-kubeconfig \
   --allow-privileged=true \
+  --cluster-dns=10.32.0.10 \
+  --cluster-domain=cluster.local \
   --pod-manifest-path=/etc/kubernetes/manifests \
   --v=2
 Restart=on-failure

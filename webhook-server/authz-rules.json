@@ -1,0 +1,50 @@
+[
+  {
+    "role": {
+      "groupName": "Domain Admins"
+    },
+    "access": [
+      {
+        "namespace": "*",
+        "access": "readWrite"
+      }
+    ]
+  },
+  {
+    "role": {
+      "groupName": "Domain Users"
+    },
+    "access": [
+      {
+        "namespace": "default",
+        "access": "readOnly"
+      },
+      {
+        "namespace": "",
+        "access": "readOnly"
+      }
+    ]
+  },
+  {
+    "role": {
+      "groupName": "contractors"
+    },
+    "access": [
+      {
+        "namespace": "*",
+        "access": "none"
+      }
+    ]
+  },
+  {
+    "role": {
+      "groupName": "nonexistentgroup"
+    },
+    "access": [
+      {
+        "namespace": "kube-system",
+        "access": "readWrite"
+      }
+    ]
+  }
+]

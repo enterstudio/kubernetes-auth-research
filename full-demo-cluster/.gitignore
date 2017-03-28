@@ -1,2 +1,4 @@
 certs
 kubeconfig
+kubeconfig-internal
+kubeconfig-external

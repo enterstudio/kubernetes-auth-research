@@ -1,25 +1,70 @@
 [
   {
     "user": {
-      "username": "ktbartholomew",
-      "uid": "500",
+      "username": "stephen@random.corp",
       "groups": [
-        "group1",
-        "group2",
-        "group3"
+        "Domain Admins",
+        "Domain Users",
+        "it-employees"
       ]
     },
     "tokens": [
-      "264d017bd9d8a64436f381137ab526b36a81bb8c1c159febe7d3319cc51ee078",
-      "c7051160f93ab52d71038155935dfae2623e348db2abeae2754423228610a5cb"
+      "3182733a03cf48567e4066351fa79a7b2c3cdde90cbcfd97ac91068ef130ff44"
     ]
   },
   {
     "user": {
-      "username": "alwaysdenied",
-      "uid": "0",
+      "username": "anthony@random.corp",
       "groups": [
-        "group1",
+        "Domain Users",
+        "it-employees"
+      ]
+    },
+    "tokens": [
+      "4442ee2957c6a085d5c5d0205705b0ae501b4b6957ffd0220e208236fd748ad2"
+    ]
+  },
+  {
+    "user": {
+      "username": "lisa@random.corp",
+      "groups": [
+        "Domain Users",
+        "software-developers"
+      ]
+    },
+    "tokens": [
+      "c17236e8e8cc90dd6d25ae5631a3ba71620b4ef62ec2fff66c31a187cac983bf"
+    ]
+  },
+  {
+    "user": {
+      "username": "evelyn@random.corp",
+      "groups": [
+        "Domain Users",
+        "qa-engineers"
+      ]
+    },
+    "tokens": [
+      "1bae934004f2fd416facae532f067a3e801e2e94b8cd0a43f3043e1c4788224d"
+    ]
+  },
+  {
+    "user": {
+      "username": "joseph@random.corp",
+      "groups": [
+        "Domain Users",
+        "contractors"
+      ]
+    },
+    "tokens": [
+      "68788c4e50caff0927770bee537cae4208b1e458e63a31cc251b49bf2b5eb123"
+    ]
+  },
+  {
+    "user": {
+      "username": "james@random.corp",
+      "groups": [
+        "Domain Users",
         "alwaysdeny"
       ]
     },

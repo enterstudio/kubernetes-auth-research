@@ -41,7 +41,7 @@ spec:
         - mountPath: /var/lib/etcd
           name: "etcd-datadir"
     - name: "webhook-server"
-      image: "quay.io/ktbartholomew/kube-webhook-server"
+      image: "quay.io/ktbartholomew/kube-webhook-server:latest"
       env:
       - name: NODE_PORT
         value: "5080"
