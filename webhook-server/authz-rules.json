@@ -7,21 +7,32 @@
       {
         "namespace": "*",
         "access": "readWrite"
+      },
+      {
+        "namespace": "",
+        "access": "readWrite"
       }
     ]
   },
   {
     "role": {
-      "groupName": "Domain Users"
+      "groupName": "project-one-devs"
     },
     "access": [
       {
-        "namespace": "default",
-        "access": "readOnly"
-      },
+        "namespace": "project-one",
+        "access": "readWrite"
+      }
+    ]
+  },
+  {
+    "role": {
+      "groupName": "project-two-devs"
+    },
+    "access": [
       {
-        "namespace": "",
-        "access": "readOnly"
+        "namespace": "project-two",
+        "access": "readWrite"
       }
     ]
   },

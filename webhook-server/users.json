@@ -16,8 +16,7 @@
     "user": {
       "username": "anthony@random.corp",
       "groups": [
-        "Domain Users",
-        "it-employees"
+        "Domain Users"
       ]
     },
     "tokens": [
@@ -29,7 +28,7 @@
       "username": "lisa@random.corp",
       "groups": [
         "Domain Users",
-        "software-developers"
+        "project-one-devs"
       ]
     },
     "tokens": [
@@ -41,7 +40,8 @@
       "username": "evelyn@random.corp",
       "groups": [
         "Domain Users",
-        "qa-engineers"
+        "project-one-devs",
+        "project-two-devs"
       ]
     },
     "tokens": [
@@ -53,6 +53,7 @@
       "username": "joseph@random.corp",
       "groups": [
         "Domain Users",
+        "project-one-devs",
         "contractors"
       ]
     },

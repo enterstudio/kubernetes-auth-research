@@ -40,3 +40,21 @@ When configured to do so, Kubernetes will send a `POST /authorize` request to th
   --authorization-mode="Webhook" \
   --authorization-webhook-config-file="/etc/kubernetes/authz-webhook.conf.yml"
   ```
+
+## Understanding the sample authorization scheme
+
+Users' authentication info comes from [users.json](users.json), where in a production environment it would probably come from an LDAP, Keystone, or SAML endpoint. At minimum, we need the user's name, and the security groups or roles to which they belong. The groups borrow some Active Directory conventions: users belonging to the group `Domain Admins` are essentially super-users, and all users belong to `Domain Users`. Other users belong to groups based on the projects they're working on (`project-one` and `project-two`).
+
+Users' authorization information is derived from [authz-rules.json](authz-rules.json). Each rule  specifies the authentication group to which it applies, and the corresponding permissions for certain Kubernetes namespaces.
+
+The namespace property is either the exact name of a namespace, or `"namespace": ""`, which matches entities that are not namespaced (like namespaces themselves, or nodes), or `"namespace": "*"`, which matches any namespace.
+
+The access property is one of `readOnly`, `readWrite`, or `none`. Users do not have access to anything unless access is explicitly granted. Of the access types, `readWrite` will supersede a previous `readOnly` rule, and `none` will supersede a previous `readOnly` or `readWrite` rule.
+
+In plain English, referencing the users in [users.json](users.json):
+
+* Stephen (stephen@random.corp) is a sysadmin and has read/write access to everything in the Kubernetes API.
+* Anthony (anthony@random.corp) is a user who doesn't belong to any projects. Because of the default authorization settings, he doesn't have access to anything in any namespace.
+* Lisa (lisa@random.corp) is a developer for "project one" and has read/write access to everything in the `project-one` namespace.
+* Evelyn (evelyn@random.corp) is a developer for both "project one" and "project two". She has read/write access to everything in both the `project-one` and `project-two` namespaces.
+* Joseph (joseph@random.corp) is a contractor on "project one", and the company does not want him to have access to the Kubernetes cluster. He doesn't have access to anything in any namespace, even though he's a member of the `project-one-devs` group.
